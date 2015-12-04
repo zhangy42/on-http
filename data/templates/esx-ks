@@ -1,6 +1,11 @@
 accepteula
-clearpart --alldrives --overwritevmfs
-install --firstdisk --overwritevmfs
+<% if (installDisk === "firstdisk") { %>
+  clearpart --firstdisk --overwritevmfs
+  install --firstdisk --overwritevmfs
+<% } else { %>
+  clearpart --drives=<%=installDisk%> --overwritevmfs
+  install --disk=<%=installDisk%> --overwritevmfs
+<% } %>
 rootpw <%=rootPlainPassword%>
 network --bootproto=dhcp --device=vmnic0
 reboot
@@ -80,7 +85,7 @@ cp /var/log/esxi_install.log "/vmfs/volumes/datastore1/firstboot-esxi_install.lo
           esxcli network ip interface remove -i <%=vmkname%>
           esxcli network ip interface add -i <%=vmkname%> -p <%=n.device%>.<%=vid%>
           esxcli network ip interface ipv4 set -i <%=vmkname%> -I <%=n.ipv4.ipAddr%> -N <%=n.ipv4.netmask%> -t static
-          esxcli network ip route ipv4 add -n default -g <%=n.ipv4.gateway%> 
+          esxcli network ip route ipv4 add -n default -g <%=n.ipv4.gateway%>
           esxcli network vswitch standard portgroup set -p <%=n.device%>.<%=vid%> -v <%=vid %>
         <% }); %>
       <% } else { %>
