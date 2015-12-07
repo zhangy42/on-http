@@ -9,7 +9,11 @@ keyboard 'us'
 timezone America/Los_Angeles --isUtc
 firewall --enabled --http --ssh
 selinux --permissive
-bootloader --location=mbr --driveorder=sda --append="crashkernel=auth rhgb"
+<% if (version === "6.5") { %>
+  bootloader --location=mbr --driveorder=<%=installDisk%> --append="crashkernel=auth rhgb"
+<% } else { %>
+  bootloader --location=mbr --driveorder=<%=installDisk%> --boot-drive=<%=installDisk%> --append="crashkernel=auth rhgb"
+<% } %>
 services --enabled=NetworkManager,sshd
 network --device=<%=macaddress%> --noipv6 --activate
 
@@ -28,8 +32,7 @@ rootpw --iscrypted <%=rootEncryptedPassword%>
 
 # Disk Partitioning
 zerombr
-clearpart --all --initlabel
-#clearpart --all --initlabel --drives=sda
+clearpart --all --drives=<%=installDisk%>
 autopart
 # END of Disk Partitioning
 
