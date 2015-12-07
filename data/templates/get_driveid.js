@@ -116,6 +116,10 @@ function parseDriveWwid(idList) {
  * @return {Array} include device name, virtual disk name and scsi ID for each disk
  */
 function parseVdInfo(pathList) {
+    if (!pathList) {
+        return [];
+    }
+
     var lines = pathList.split('\n').map(function(line) {
         var split = line.split(/\s+/);
         return [split[8],split[10]].join('->');
@@ -146,6 +150,10 @@ function parseVdInfo(pathList) {
  * @return {Array} include device name and scsi info for each disk
  */
 function parseScsiInfo(lsscsiList) {
+    if (!lsscsiList) {
+        return [];
+    }
+
     var lines = lsscsiList.split('\n');
     return lines.map(function(line) {
         if(line){
@@ -193,11 +201,11 @@ function buildDriveMap(wwidData, vdData, scsiData) {
         driveIds[k].linuxWwid = linuxWwid[1];
     });
     console.log(JSON.stringify(driveIds));
-        return 0;
+    return 0;
 }
 
 function run() {
-    var wwidData, vdData, scsiData;
+    var wwidData = '', vdData = '', scsiData = '';
     try {
         exec(cmdDriveWwid, options, function (err0, stdout0) {
             if (err0) {
@@ -206,11 +214,9 @@ function run() {
             }
             wwidData = stdout0;
             exec(cmdVdInfo, options, function (err1, stdout1) {
-                if (err1) {
-                    console.error(err1.toString());
-                    process.exit(1);
-                }
-                vdData = stdout1;
+                //if only have SATA disk, there will not be /dev/disk/by-path folder, so we should
+                //ignore the error for execution of cmdVdInfo
+                vdData = (err1 ? '' : stdout1);
                 exec(cmdScsiId, options, function (err2, stdout2) {
                     if (err2) {
                         console.error(err2.toString());
