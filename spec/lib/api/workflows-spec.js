@@ -29,6 +29,7 @@ describe('Http.Api.Workflows', function () {
         taskGraphRunner.defineTaskGraph = sinon.stub().resolves();
         taskGraphRunner.getTaskGraphLibrary = sinon.stub().resolves();
         taskGraphRunner.getTaskLibrary = sinon.stub().resolves();
+        taskGraphRunner.runTaskGraph = sinon.stub().resolves();
         waterline.nodes = {
             findByIdentifier: sinon.stub().resolves()
         };
@@ -79,6 +80,18 @@ describe('Http.Api.Workflows', function () {
             return helper.request().get('/api/1.1/workflows/12345')
             .expect('Content-Type', /^application\/json/)
             .expect(404);
+        });
+    });
+
+    describe('POST /workflows', function () {
+        it('should persist a task graph', function () {
+            var graph = { name: 'foobar' };
+            taskGraphRunner.runTaskGraph.resolves(graph);
+
+            return helper.request().post('/api/1.1/workflows')
+            .send(graph)
+            .expect('Content-Type', /^application\/json/)
+            .expect(200, graph);
         });
     });
 
