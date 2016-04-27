@@ -37,14 +37,12 @@ function onHttpContextFactory(di, directory) {
 
         injectables: _.flattenDeep([
             helper.requireGlob(__dirname + '/lib/api/login/*.js'),
-            helper.requireGlob(__dirname + '/lib/api/view/*.js'),
             helper.requireGlob(__dirname + '/lib/api/1.1/**/*.js'),
             helper.requireGlob(__dirname + '/lib/services/**/*.js'),
             helper.requireGlob(__dirname + '/lib/serializables/**/*.js'),
             require('./app'),
             helper.requireWrapper('rimraf', 'rimraf', undefined, __dirname),
-            helper.requireWrapper('os-tmpdir', 'osTmpdir', undefined, __dirname),
-            helper.requireWrapper('fs', 'fs', undefined, __dirname)
+            helper.requireWrapper('os-tmpdir', 'osTmpdir', undefined, __dirname)
         ]),
 
         prerequisiteInjectables: _.flattenDeep([
@@ -52,7 +50,8 @@ function onHttpContextFactory(di, directory) {
             onTasks.injectables,
             helper.simpleWrapper(ws, 'ws'),
             helper.simpleWrapper(ws.Server, 'WebSocketServer'),
-            helper.requireWrapper('swagger-express-mw', 'swagger', undefined, __dirname)
+            helper.requireWrapper('swagger-express-mw', 'swagger', undefined, __dirname),
+            helper.requireWrapper('superagent', 'Superagent')
         ])
     };
 }

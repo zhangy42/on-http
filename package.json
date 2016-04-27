@@ -38,16 +38,17 @@
     "passport": "^0.3.2",
     "passport-anonymous": "~1.0.1",
     "passport-http": "~0.3.0",
-    "passport-local": "^1.0.0",
     "passport-jwt": "~2.0.0",
+    "passport-local": "^1.0.0",
     "pluralize": "~1.1.2",
     "rimraf": "~2.5.0",
+    "superagent": "^1.8.3",
     "swagger-express-mw": "^0.6.0",
     "swagger-tools": "~0.9.11",
     "tar": "~2.2.1",
     "tv4": "~1.2.7",
-    "ws": "^0.8.0",
-    "url-parse": "~1.1.1"
+    "url-parse": "~1.1.1",
+    "ws": "^0.8.0"
   },
   "devDependencies": {
     "apidoc": "^0.12.1",
